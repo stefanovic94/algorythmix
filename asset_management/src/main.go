@@ -1,7 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"github.com/gin-gonic/gin"
+	"log"
+
+	"net/http"
+)
 
 func main() {
-	fmt.Println("Asset Management")
+	router := gin.Default()
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
+
+	log.Fatal(router.Run(":8000"))
 }
