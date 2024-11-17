@@ -1,0 +1,32 @@
+services:
+  trading:
+    image: trading
+    build:
+      context: .
+      dockerfile: ./trading/Dockerfile
+    command:
+      ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - 8000:8000
+    environment:
+      - LOGGING_LEVEL=debug
+    env_file:
+      - ../.envs/dev.env
+    # - ../.envs/sandbox.env
+    # - ../.envs/prod.env
+
+  financial_analysis:
+    image: financial_analysis
+    build:
+      context: .
+      dockerfile: ./financial_analysis/Dockerfile
+    command:
+      ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - 8000:8000
+    environment:
+      - LOGGING_LEVEL=debug
+    env_file:
+      - ../.envs/dev.env
+    # - ../.envs/sandbox.env
+    # - ../.envs/prod.env
