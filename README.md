@@ -1,8 +1,11 @@
 # Algorythmix
 
-Represents an app for financial asset management and trading called "Algorythmix". The app is intended for non-commercial
-use. Algorythmix includes features like asset and portfolio tracking and management, financial analysis, and trading.
-This repository acts like a monorepo for the system based on an event-driven microservices architecture.
+Represents an app for financial asset management and trading called "Algorythmix". The app is intended for showcasing technical skills
+and non-commercial use. The app is being continuously developed.
+
+The app includes features like asset and portfolio tracking and management, financial analysis, and trading.
+This repository acts like a monorepo for the system based on an event-driven microservices architecture for a simpler navigation between
+different services which may vary in tech stack and design.
 
 ### Services
 
