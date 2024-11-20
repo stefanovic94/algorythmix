@@ -18,6 +18,7 @@ from application.controllers.http import health_check
 from configs.logger import get_logger
 from configs.services import get_services
 from configs.settings import get_settings
+from infrastructure.dtos import StrategyDto
 
 logger = get_logger(__name__)
 services = get_services()
@@ -34,7 +35,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
 
     await init_beanie(
         database=services.mongodb.FinancialAnalysis,
-        document_models=[],
+        document_models=[
+            StrategyDto,
+        ],
     )
 
     for task in []:

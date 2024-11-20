@@ -16,6 +16,7 @@ class Services(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     cache: redis.Redis
+    # event_store: KafkaAdapter = Field(...)
     mongodb: AsyncIOMotorClient = Field(...)
 
 
@@ -34,7 +35,7 @@ def get_services() -> Services:
                 socket_connect_timeout=settings.CACHE_SOCKET_CONNECT_TIMEOUT,
             )
         ),
-        # event_broker=KafkaAdapter(
+        # event_store=KafkaAdapter(
         #     source=settings.APP_NAME,
         #     config=KafkaConfig(
         #         host=settings.CONFLUENT_URL,
