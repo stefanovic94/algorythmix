@@ -5,7 +5,7 @@ TODO: insert badges here, test coverage, maintainability rating, CI/CD workflows
 This service represents the financial analysis domain of the Algorythmix app. The primary responsibilities of the financial
 analysis domain is managing strategies, identifying patterns and trading signals, and backtesting.
 
-# Table of contents
+### Table of contents
 * [Technology](#technology)
 * [Libraries](#libraries)
 * [Architecture & Design](#architecture--design)

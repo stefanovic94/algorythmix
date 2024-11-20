@@ -5,7 +5,7 @@ TODO: insert badges here, test coverage, maintainability rating, CI/CD workflows
 This service represents the trading domain of the Algorythmix app. The primary responsibilities of the trading domain
 is executing trades against 3rd-party systems and managing the history of trades.
 
-# Table of contents
+### Table of contents
 * [Technology](#technology)
 * [Libraries](#libraries)
 * [Architecture & Design](#architecture--design)
