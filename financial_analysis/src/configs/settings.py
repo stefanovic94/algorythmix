@@ -11,7 +11,11 @@ class Settings(BaseSettings):
     LOGGING_LEVEL: Literal["debug", "info", "warning", "error", "critical"] = Field(
         "info"
     )
-    CACHE_URL: str = Field(..., description="Connection URL for the cache instance.")
+    CACHE_URL: str = Field(
+        "redis://root:somepassword@localhost:6379",
+        description="Connection URL for the cache instance.",
+        examples=["rediss://app:somepassword@somerediscloudhost.redis-cloud.com:port"],
+    )
     CACHE_MAX_CONNECTIONS: int = Field(
         30, description="Maximum number of connections to the cache."
     )
@@ -22,7 +26,9 @@ class Settings(BaseSettings):
         600, description="Timeout for connection establishment."
     )
     NOSQL_DATABASE_CONNECTION_STRING: str = Field(
-        ..., description="Connection string to access the NoSQL database."
+        "mongodb://root:somepassword@mongo:27017/",
+        description="Connection string to access the NoSQL database.",
+        examples=["mongodb+srv://app:somepassword@someatlasclusterhost.mongodb.net/"],
     )
 
 
