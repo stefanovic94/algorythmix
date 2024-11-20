@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: financial-analysis
+  namespace: default
+  labels:
+    app: financial-analysis
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: financial-analysis
+  template:
+    metadata:
+      labels:
+        app: financial-analysis
+    spec:
+      containers:
+      - name: financial-analysis
+        image: ghcr.io/stefanovic94/financial-analysis:stable
+        command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+        ports:
+        - containerPort: 8000
+        envFrom:
+          - configMapRef:
+              name: default-env
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: financial-analysis-svc
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  selector:
+    app: financial-analysis
