@@ -1,4 +1,5 @@
 from domain.entities import Strategy
+from domain.enums import RiskTolerances
 from domain.errors import NotFoundError
 from infrastructure.dtos import StrategyDto
 from infrastructure.ports import StrategyRepositoryPort
@@ -14,12 +15,15 @@ class StrategyRepository(StrategyRepositoryPort):
             return dto.to_domain()
 
     async def find(
-        self, some: str | None = None, sort_by: str = "+name", limit: int | None = None
+        self,
+        risk_tolerances: list[RiskTolerances] | None = None,
+        sort_by: str = "+name",
+        limit: int | None = None,
     ) -> list[Strategy]:
         query = {}
 
-        if some is not None:
-            query["some"] = "query"
+        if risk_tolerances:
+            query["risk_tolerances"] = [x.value for x in risk_tolerances]
 
         return [
             strategy.to_domain()
