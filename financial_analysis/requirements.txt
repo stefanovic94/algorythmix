@@ -15,4 +15,3 @@ confluent-kafka~=2.6
 pandas~=2.2
 numpy~=1.26
 scikit-learn~=1.5
-sentry-sdk[fastapi,httpx,pymongo,starlette]~=2.17.0
