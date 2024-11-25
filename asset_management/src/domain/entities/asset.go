@@ -1,8 +1,14 @@
 package entities
 
 type Asset struct {
-	ID        string
-	Name      string
-	Quantity  int
-	CreatedAt string
+	ID                  string
+	Symbol              string
+	shortName           string
+	longName            string
+	city                string
+	state               string
+	country             string
+	sector              string
+	industry            string
+	longBusinessSummary string
 }
