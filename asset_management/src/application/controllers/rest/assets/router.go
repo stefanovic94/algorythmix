@@ -15,20 +15,23 @@ func AssetRouter(rg *gin.RouterGroup) {
 	rg.POST("", func(c *gin.Context) {
 		var obj CreateAsset
 
-		err := c.Bind(&obj)
-
+		err := c.BindJSON(&obj)
 		if err != nil {
-			log.Printf("Error: %s", err)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"status": "error",
+				"status": "invalid request body",
 			})
 			return
 		}
 
-		assets.CreateAssetCommand(make(chan entities.Asset), obj.symbol)
+		assetCreated := make(chan entities.Asset)
+
+		assets.CreateAssetCommand(assetCreated, obj.Symbol)
+
+		msg := <-assetCreated
 
 		c.JSON(http.StatusCreated, gin.H{
-			"status": "asset created",
+			"id":     msg.ID,
+			"symbol": msg.Symbol,
 		})
 	})
 
@@ -63,9 +66,7 @@ func AssetRouter(rg *gin.RouterGroup) {
 
 		log.Info().Str("id", id).Msg("deleting asset...")
 
-		c.JSON(http.StatusOK, gin.H{
-			"status": "ok",
-		})
+		c.JSON(http.StatusNoContent, gin.H{})
 	})
 
 }

@@ -1,5 +1,5 @@
 package assets
 
 type CreateAsset struct {
-	symbol string
+	Symbol string `json:symbol validate:"required"`
 }
