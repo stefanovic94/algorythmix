@@ -24,6 +24,8 @@ func main() {
 	ctxBg := context.Background()
 
 	svc := configs.InitializeServices(ctxBg)
+	// TODO add configs.ShutdownServices() func to run on server shutdown
+	// something like defer configs.ShutdownServices()
 
 	configs.Services = svc
 

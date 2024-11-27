@@ -11,7 +11,11 @@ func DeleteAssetCommand(c chan<- string, id string) {
 
 	log.Info().Str("id", id).Msg("deleting asset...")
 
-	go AssetRepository.DeleteAsset(id)
+	if err := AssetRepository.DeleteAsset(id); err != nil {
+		log.Error().Err(err).Msg("error deleting asset")
+		// TODO improve error handling
+		panic(err)
+	}
 
 	go DomainEvents.AssetDeleted(c, id)
 

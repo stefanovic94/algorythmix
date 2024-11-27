@@ -5,6 +5,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"os"
 )
 
 // Services struct holds references to external tools
@@ -29,10 +30,9 @@ func InitializeServices(ctx context.Context) *ServicesType {
 
 	mdbClient, err := Connect(ctx, Settings)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Error connecting to MongoDB")
+		log.Fatal().Err(err).Msg("Error connecting to MongoDB. Check the connection string and cluster availability.")
+		os.Exit(1)
 	}
-
-	log.Print(mdbClient.Ping(ctx, nil))
 
 	return &ServicesType{
 		Mongodb: mdbClient,
