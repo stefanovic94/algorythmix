@@ -39,9 +39,9 @@ func createAsset(c *gin.Context) {
 }
 
 func findAssets(c *gin.Context) {
-	industry := c.Param("industry")
-	sort := c.Param("sort")
-	limitParam := c.Param("limit")
+	industry := c.DefaultQuery("industry", "")
+	sort := c.DefaultQuery("sort", "+symbol")
+	limitParam := c.DefaultQuery("limit", "0")
 
 	if limitParam != "" {
 		limit, err := strconv.Atoi(limitParam)
@@ -63,6 +63,10 @@ func findAssets(c *gin.Context) {
 			continue
 		}
 		response = append(response, res)
+	}
+
+	if response == nil {
+		response = []AssetResponse{}
 	}
 
 	c.JSON(http.StatusOK, gin.H{

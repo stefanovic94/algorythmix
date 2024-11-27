@@ -9,6 +9,7 @@ import (
 	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
 
@@ -67,9 +68,24 @@ func FindAssets(params FindAssetsQueryParams) ([]entities.Asset, error) {
 	defer cancel()
 	collection := configs.Services.Mongodb.Database("AssetManagement").Collection("Assets")
 
+	// Build the filter dynamically
+	filter := bson.M{}
+	if params.Industry != "" {
+		filter["industry"] = params.Industry
+	}
+
+	// Build the options dynamically
+	findOptions := options.Find()
+	if params.SortBy != "" {
+		findOptions.SetSort(bson.D{{Key: "sortField", Value: params.SortBy}})
+	}
+	if params.Limit > 0 {
+		findOptions.SetLimit(int64(params.Limit))
+	}
+
 	var objs []dtos.AssetDto
 
-	cursor, err := collection.Find(ctx, bson.M{})
+	cursor, err := collection.Find(ctx, filter, findOptions)
 	if err != nil {
 		// TODO determine error handling strategy here
 		return nil, err

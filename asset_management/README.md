@@ -6,6 +6,7 @@ responsibility of this service is managing assets and portfolios.
 ### Issues
 
 - [ ] Add update asset HTTP handler.
+- [ ] Add pagination in FindAssets handler.
 - [ ] Make check for existing object before deletion, etc.
 - [ ] Implement error handling in AssetRepository.
 - [ ] Add ShutdownServices() function of closing connections on server shutdown.
