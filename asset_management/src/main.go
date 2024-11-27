@@ -2,6 +2,7 @@ package main
 
 import (
 	"asset_management/src/application/controllers/rest/assets"
+	"asset_management/src/configs"
 	"asset_management/src/libs/logging"
 	"context"
 	"errors"
@@ -17,7 +18,14 @@ import (
 func main() {
 	log := logger.GetLogger()
 
+	log.Info().Msg("starting server...")
+
 	router := gin.Default()
+	ctxBg := context.Background()
+
+	svc := configs.InitializeServices(ctxBg)
+
+	configs.Services = svc
 
 	// Define here how many requests per second per IP
 	store := ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
@@ -75,9 +83,6 @@ func main() {
 	// catching ctx.Done().
 	select {
 	case <-ctx.Done():
-		// this is where to close connections
-		log.Info().Msg("Closing connections...")
+		log.Info().Msg("Server exited")
 	}
-
-	log.Info().Msg("Server exited")
 }
