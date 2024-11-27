@@ -1,9 +1,9 @@
 package assets
 
 import (
-	assetCommands "asset_management/src/application/commands/assets"
-	assetQueries "asset_management/src/application/queries/assets"
-	"asset_management/src/domain/entities"
+	AssetCommands "asset_management/src/application/commands/assets"
+	AssetQueries "asset_management/src/application/queries/assets"
+	Entities "asset_management/src/domain/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -19,9 +19,9 @@ func createAsset(c *gin.Context) {
 		return
 	}
 
-	assetCreated := make(chan entities.Asset)
+	assetCreated := make(chan Entities.Asset)
 
-	assetCommands.CreateAssetCommand(assetCreated, obj.Symbol)
+	go AssetCommands.CreateAssetCommand(assetCreated, obj.Symbol)
 
 	msg := <-assetCreated
 
@@ -40,7 +40,7 @@ func findAssets(c *gin.Context) {
 func getAsset(c *gin.Context) {
 	id := c.Param("id")
 
-	obj := assetQueries.GetAssetQuery(id)
+	obj := AssetQueries.GetAssetQuery(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"_id":        obj.ID,
@@ -58,7 +58,11 @@ func updateAsset(c *gin.Context) {
 }
 
 func deleteAsset(c *gin.Context) {
-	// id := c.Param("id")
+	id := c.Param("id")
+
+	assetDeleted := make(chan string)
+
+	go AssetCommands.DeleteAssetCommand(assetDeleted, id)
 
 	c.JSON(http.StatusNoContent, gin.H{})
 }

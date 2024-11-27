@@ -7,6 +7,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+type FindAssetsQueryParams struct {
+	Industry string
+	SortBy   string
+	Limit    int
+}
+
 func GetAsset(id string) entities.Asset {
 	collection := configs.Services.Mongodb.Database("AssetManagement").Collection("Assets")
 
@@ -33,7 +39,17 @@ func CreateAsset(obj entities.Asset) entities.Asset {
 	return obj
 }
 
-func FindAssets(ctx context.Context, sort string, limit int) []entities.Asset {
+func FindAssets(params FindAssetsQueryParams) []entities.Asset {
 	// collection := configs.Services.Mongodb.Database("AssetManagement").Collection("Assets")
 	return []entities.Asset{}
+}
+
+func DeleteAsset(id string) {
+	collection := configs.Services.Mongodb.Database("AssetManagement").Collection("Assets")
+
+	_, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		// TODO determine error handling strategy here
+		panic(err)
+	}
 }

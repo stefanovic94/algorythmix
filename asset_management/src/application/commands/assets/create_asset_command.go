@@ -3,13 +3,13 @@ package assets
 import (
 	"github.com/google/uuid"
 
-	"asset_management/src/domain/entities"
-	"asset_management/src/domain/events"
-	"asset_management/src/infrastructure/adapters"
+	Entities "asset_management/src/domain/entities"
+	DomainEvents "asset_management/src/domain/events"
+	AssetRepository "asset_management/src/infrastructure/adapters"
 	"asset_management/src/libs/logging"
 )
 
-func CreateAssetCommand(c chan<- entities.Asset, symbol string) {
+func CreateAssetCommand(c chan<- Entities.Asset, symbol string) {
 	log := logger.GetLogger()
 
 	log.Info().Msg("creating new asset...")
@@ -18,14 +18,14 @@ func CreateAssetCommand(c chan<- entities.Asset, symbol string) {
 
 	// TODO get asset by its symbol from external API and populate entity model
 
-	obj := entities.Asset{
+	obj := Entities.Asset{
 		ID:     id,
 		Symbol: symbol,
 	}
 
-	go adapters.CreateAsset(obj)
+	go AssetRepository.CreateAsset(obj)
 
-	go events.AssetCreated(c, obj)
+	go DomainEvents.AssetCreated(c, obj)
 
 	log.Info().Str("id", id).Msg("asset created...")
 }
