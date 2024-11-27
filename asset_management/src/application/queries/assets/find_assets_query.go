@@ -6,10 +6,14 @@ import (
 	logger "asset_management/src/libs/logging"
 )
 
-func FindAssetsQuery(params AssetRepository.FindAssetsQueryParams) []entities.Asset {
+func FindAssetsQuery(industry string, sort string, limit int) []entities.Asset {
 	log := logger.GetLogger()
 
-	objs, err := AssetRepository.FindAssets(params)
+	objs, err := AssetRepository.FindAssets(AssetRepository.FindAssetsQueryParams{
+		Industry: industry,
+		SortBy:   sort,
+		Limit:    limit,
+	})
 	if err != nil {
 		log.Error().Err(err).Msg("error finding assets")
 		// TODO improve error handling

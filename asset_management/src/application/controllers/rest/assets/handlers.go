@@ -5,7 +5,9 @@ import (
 	AssetQueries "asset_management/src/application/queries/assets"
 	Entities "asset_management/src/domain/entities"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 	"net/http"
+	"strconv"
 )
 
 func createAsset(c *gin.Context) {
@@ -25,17 +27,46 @@ func createAsset(c *gin.Context) {
 
 	msg := <-assetCreated
 
-	c.JSON(http.StatusCreated, gin.H{
-		"id":     msg.ID,
-		"symbol": msg.Symbol,
-	})
+	var responseData AssetResponse
+	if err := copier.Copy(&responseData, &msg); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "could not convert internal data structure to response data structure",
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, responseData)
 }
 
 func findAssets(c *gin.Context) {
-	// objs := AssetQueries.FindAssetsQuery(params)
+	industry := c.Param("industry")
+	sort := c.Param("sort")
+	limitParam := c.Param("limit")
+
+	if limitParam != "" {
+		limit, err := strconv.Atoi(limitParam)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": "invalid limit parameter",
+			})
+			return
+		}
+		print(limit)
+	}
+
+	objs := AssetQueries.FindAssetsQuery(industry, sort, 0)
+
+	var response []AssetResponse
+	for _, obj := range objs {
+		var res AssetResponse
+		if err := copier.Copy(&res, &obj); err != nil {
+			continue
+		}
+		response = append(response, res)
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status": "ok",
+		"items": response,
 	})
 }
 
@@ -50,11 +81,15 @@ func getAsset(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"_id":        obj.ID,
-		"symbol":     obj.Symbol,
-		"short_name": obj.ShortName,
-	})
+	var responseData AssetResponse
+	if err := copier.Copy(&responseData, &obj); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "could not convert internal data structure to response data structure",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, responseData)
 }
 
 func updateAsset(c *gin.Context) {
