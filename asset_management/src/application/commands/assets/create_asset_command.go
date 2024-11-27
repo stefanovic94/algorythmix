@@ -5,6 +5,7 @@ import (
 
 	"asset_management/src/domain/entities"
 	"asset_management/src/domain/events"
+	"asset_management/src/infrastructure/adapters"
 	"asset_management/src/libs/logging"
 )
 
@@ -21,6 +22,8 @@ func CreateAssetCommand(c chan<- entities.Asset, symbol string) {
 		ID:     id,
 		Symbol: symbol,
 	}
+
+	go adapters.CreateAsset(obj)
 
 	go events.AssetCreated(c, obj)
 
