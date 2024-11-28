@@ -1,14 +1,14 @@
 package entities
 
 type Asset struct {
-	ID                  string `bson:"_id"`
-	Symbol              string `bson:"symbol"`
-	ShortName           string `bson:"short_name"`
-	LongName            string `bson:"long_name"`
-	City                string `bson:"city"`
-	State               string `bson:"state"`
-	Country             string `bson:"country"`
-	Sector              string `bson:"sector"`
-	Industry            string `bson:"industry"`
-	LongBusinessSummary string `bson:"long_business_summary"`
+	ID                  string `json:"id"`
+	Symbol              string `json:"symbol"`
+	ShortName           string `json:"short_name"`
+	LongName            string `json:"long_name"`
+	City                string `json:"city"`
+	State               string `json:"state"`
+	Country             string `json:"country"`
+	Sector              string `json:"sector"`
+	Industry            string `json:"industry"`
+	LongBusinessSummary string `json:"long_business_summary"`
 }

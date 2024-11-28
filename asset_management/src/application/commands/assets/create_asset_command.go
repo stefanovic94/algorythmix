@@ -16,6 +16,7 @@ func CreateAssetCommand(c chan<- Entities.Asset, symbol string) {
 
 	id := uuid.NewString()
 
+	// TODO check if asset with this symbol already exists
 	// TODO get asset by its symbol from external API and populate entity model
 
 	obj := Entities.Asset{
@@ -23,7 +24,11 @@ func CreateAssetCommand(c chan<- Entities.Asset, symbol string) {
 		Symbol: symbol,
 	}
 
-	go AssetRepository.CreateAsset(obj)
+	if _, err := AssetRepository.CreateAsset(obj); err != nil {
+		log.Error().Err(err).Msg("error creating asset")
+		// TODO improve error handling
+		panic(err)
+	}
 
 	go DomainEvents.AssetCreated(c, obj)
 

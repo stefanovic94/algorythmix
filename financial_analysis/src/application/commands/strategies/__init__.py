@@ -1,1 +1,4 @@
 from .create_strategy_command import CreateStrategyCommand
+from .delete_strategy_command import DeleteStrategyCommand
+from .switch_strategy_command import SwitchStrategyCommand
+from .update_strategy_command import UpdateStrategyCommand

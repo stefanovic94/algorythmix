@@ -11,6 +11,11 @@ class Settings(BaseSettings):
     LOGGING_LEVEL: Literal["debug", "info", "warning", "error", "critical"] = Field(
         "info"
     )
+    NOSQL_DATABASE_CONNECTION_STRING: str = Field(
+        "mongodb://root:somepassword@mongo:27017/",
+        description="Connection string to access the NoSQL database.",
+        examples=["mongodb+srv://app:somepassword@someatlasclusterhost.mongodb.net/"],
+    )
     CACHE_URL: str = Field(
         "redis://root:somepassword@localhost:6379",
         description="Connection URL for the cache instance.",
@@ -25,10 +30,16 @@ class Settings(BaseSettings):
     CACHE_SOCKET_CONNECT_TIMEOUT: int = Field(
         600, description="Timeout for connection establishment."
     )
-    NOSQL_DATABASE_CONNECTION_STRING: str = Field(
-        "mongodb://root:somepassword@mongo:27017/",
-        description="Connection string to access the NoSQL database.",
-        examples=["mongodb+srv://app:somepassword@someatlasclusterhost.mongodb.net/"],
+    KAFKA_URL: str = Field(..., description="URL of the kafka instance/cluster.")
+    KAFKA_USERNAME: str = Field(
+        ..., description="Username for accessing the kafka instance/cluster."
+    )
+    KAFKA_PASSWORD: str = Field(
+        ..., description="Password for accessing the kafka instance/cluster."
+    )
+    KAFKA_MIN_COMMIT_COUNT: int = Field(
+        5,
+        description="Specifies the interval when the progress on the event stream is being committed to the kafka instance/cluster measured in number of messages received.",
     )
 
 

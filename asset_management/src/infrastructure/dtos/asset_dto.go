@@ -1,8 +1,8 @@
 package dtos
 
 type AssetDto struct {
-	ID                  string `bson:"_id,omitempty"`
-	Symbol              string `bson:"symbol,omitempty"`
+	ID                  string `bson:"_id"`
+	Symbol              string `bson:"symbol"`
 	shortName           string `bson:"short_name,omitempty"`
 	longName            string `bson:"long_name,omitempty"`
 	city                string `bson:"city,omitempty"`
