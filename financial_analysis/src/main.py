@@ -20,6 +20,7 @@ from configs.services import get_services
 from configs.settings import get_settings
 from domain.constants import TOPICS
 from infrastructure.dtos import StrategyDto
+from libs.streams.event_handler import EventHandler
 
 logger = get_logger(__name__)
 services = get_services()
@@ -72,7 +73,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
         logger.info("stopping %s...", settings.APP_NAME)
         scheduler.shutdown()
         services.mongodb.close()
-        # await services.event_store.close()
+        await services.event_store.close()
         await FastAPILimiter.close()
         await services.cache.aclose(close_connection_pool=True)
         logger.info("clean up completed")
