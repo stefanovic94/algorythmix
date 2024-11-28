@@ -18,6 +18,7 @@ from application.controllers.http import health_check
 from configs.logger import get_logger
 from configs.services import get_services
 from configs.settings import get_settings
+from domain.constants import TOPICS
 from infrastructure.dtos import StrategyDto
 
 logger = get_logger(__name__)
@@ -53,16 +54,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
         )
     scheduler.start()
 
-    # await services.event_broker.connect()
-    # streams: list[str] = [x.value for x in []]
-    # if streams:
-    #     loop.create_task(
-    #         services.event_broker.subscribe(
-    #             event_handler=EventHandler(supported_events=[]),
-    #             topics=streams,
-    #             timeout=1.0,
-    #         )
-    #     )
+    await services.event_store.connect()
+    if TOPICS:
+        loop.create_task(
+            services.event_store.subscribe(
+                event_handler=EventHandler(supported_events=[]),
+                topics=TOPICS,
+                timeout=1.0,
+            )
+        )
 
     logger.info("%s ready", settings.APP_NAME)
 
@@ -72,7 +72,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
         logger.info("stopping %s...", settings.APP_NAME)
         scheduler.shutdown()
         services.mongodb.close()
-        # await services.event_broker.close()
+        # await services.event_store.close()
         await FastAPILimiter.close()
         await services.cache.aclose(close_connection_pool=True)
         logger.info("clean up completed")

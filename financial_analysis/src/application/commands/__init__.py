@@ -1,1 +1,6 @@
-from .strategies import CreateStrategyCommand
+from .strategies import (
+    CreateStrategyCommand,
+    DeleteStrategyCommand,
+    SwitchStrategyCommand,
+    UpdateStrategyCommand,
+)

@@ -6,8 +6,8 @@ from infrastructure.ports import StrategyRepositoryPort
 
 
 class StrategyRepository(StrategyRepositoryPort):
-    async def create(self, *args, **kwargs) -> Strategy:
-        pass
+    async def create(self, obj: Strategy) -> Strategy:
+        raise NotImplementedError()
 
     async def get(self, id: str) -> Strategy | None:
         dto = await StrategyDto.get(id)
@@ -34,7 +34,7 @@ class StrategyRepository(StrategyRepositoryPort):
         ]
 
     async def update(self, strategy: Strategy) -> Strategy:
-        pass
+        raise NotImplementedError()
 
     async def delete(self, strategy: Strategy) -> None:
         dto = await self.get(str(strategy))
