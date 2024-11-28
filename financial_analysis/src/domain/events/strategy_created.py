@@ -1,23 +1,32 @@
 from pydantic import BaseModel, Field, model_validator, ValidationError
 from typing_extensions import Self
 
+from configs.logger import get_logger
 from configs.settings import get_settings
 from libs.streams import Event
 
+logger = get_logger(__name__)
 settings = get_settings()
 
 
 class EventData(BaseModel):
+    """Represents the format of the `data` key in the event payload."""
+
     id: str = Field(..., description="ID of the strategy.")
     name: str = Field(..., description="Name of the strategy.")
 
 
 class StrategyCreated(Event):
     """
-    Represents a strategy created event.
+    Represents a `strategy created` event. This event is being produced by the `CreateStategyCommand`
+    in the application layer.
 
-    Based on the pydantic BaseModel type for easier validation and testing without
-    having to manage a schema registry.
+    This class contains the logic of what the event should look like and where
+    it should be produced (e.g. Kafka, internal pub/sub, etc.).
+
+    Based on the pydantic BaseModel type for easier validation without
+    having to manage a schema registry, and easier testing without having to
+    spin up infrastructure dependencies.
     """
 
     subject: str = Field("")
@@ -45,7 +54,7 @@ class StrategyCreated(Event):
         return self
 
     async def produce(self) -> None:
-        print(f"producing {self.__class__} event")
+        logger.info("producing %s event", self.__class__)
 
     async def process(self) -> None:
         raise NotImplementedError(
