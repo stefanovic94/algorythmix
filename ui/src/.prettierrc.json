@@ -1,0 +1,8 @@
+{
+  "trailingComma": "all",
+  "singleQuote": true,
+  "indent": 4,
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ]
+}
