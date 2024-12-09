@@ -162,3 +162,4 @@ cython_debug/
 .idea/
 
 /ui/.next/
+/ui/.env.local
