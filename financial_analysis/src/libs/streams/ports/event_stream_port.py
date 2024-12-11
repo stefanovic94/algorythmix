@@ -1,4 +1,3 @@
-import json
 from abc import ABC, abstractmethod
 from datetime import datetime, timezone
 from typing import Any
@@ -13,28 +12,34 @@ class EventStreamPort(ABC):
 
     @abstractmethod
     async def connect(self) -> None:
+        """
+        Establish a connection to the event store.
+        """
         pass
 
     @abstractmethod
     async def close(self) -> None:
+        """
+        Close the connection to the event store.
+        """
         pass
 
     def _to_cloudevents_specification(
         self, event_type: str, raw_event_data: dict[str, Any], subject: str = ""
-    ) -> str:
-        """Build an event message following the CloudEvents specification"""
-        return json.dumps(
-            {
-                "id": str(uuid4()),
-                "source": self._source,
-                "time": datetime.now(timezone.utc).isoformat(),
-                "type": event_type,
-                "subject": subject or raw_event_data.get("_id", ""),
-                "specversion": "1.0",
-                "datacontenttype": "application/json",
-                "data": raw_event_data,
-            }
-        )
+    ) -> dict[str, Any]:
+        """
+        Build an event message following the CloudEvents specification.
+        """
+        return {
+            "id": str(uuid4()),
+            "source": self._source,
+            "time": datetime.now(timezone.utc).isoformat(),
+            "type": event_type,
+            "subject": subject or raw_event_data.get("_id", ""),
+            "specversion": "1.0",
+            "datacontenttype": "application/json",
+            "data": raw_event_data,
+        }
 
     @abstractmethod
     async def produce(
@@ -71,4 +76,21 @@ class EventStreamPort(ABC):
         topics: list[str],
         timeout: float = 1.0,
     ) -> None:
+        """
+        Open subscriptions to the topics and process each incoming event based
+        on the provided event handler.
+
+        Parameters
+        ----------
+        event_handler : EventHandler
+            The event handler which is used to process each incoming event.
+        topics : list[str]
+            The list of topics to subscribe to.
+        timeout : float = 1.0
+            The timeout between each pull from the event store.
+
+        Returns
+        -------
+        None
+        """
         pass

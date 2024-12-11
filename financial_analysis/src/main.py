@@ -109,7 +109,8 @@ app.include_router(
     include_in_schema=False if settings.ENVIRONMENT == "production" else True,
 )
 app.include_router(
-    health_check.router, dependencies=[Depends(RateLimiter(times=100, seconds=60))]
+    health_check.router,
+    dependencies=[Depends(RateLimiter(times=100, seconds=60))],
 )
 add_pagination(app)
 
