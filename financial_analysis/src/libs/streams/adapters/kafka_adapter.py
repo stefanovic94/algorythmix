@@ -1,4 +1,5 @@
 import asyncio
+import json
 from typing import Any
 
 from confluent_kafka import Producer, Consumer
@@ -51,8 +52,10 @@ class KafkaAdapter(EventStreamPort):
         if self.__producer is None:
             raise EventBrokerError("Producer is not connected")
 
-        value = self._to_cloudevents_specification(
-            event_type=event_type, raw_event_data=event_data
+        value = json.dumps(
+            self._to_cloudevents_specification(
+                event_type=event_type, raw_event_data=event_data
+            )
         )
         self.__producer.produce(topic=topic, key=key, value=value)
         self.__producer.poll(0)

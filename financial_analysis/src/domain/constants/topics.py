@@ -1,1 +1,1 @@
-TOPICS: list[str] = []
+TOPICS: list[str] = ["test-topic"]
